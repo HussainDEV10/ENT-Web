@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>موقع ترفيهي</title>
+  
+  <!-- تضمين خط Alexanderia -->
+  <link href="https://fonts.googleapis.com/css2?family=Alexanderia&display=swap" rel="stylesheet">
+  
+  <!-- ربط ملف CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,6 +19,7 @@
         <li><a href="#games">الألعاب</a></li>
         <li><a href="#posts">المنشورات</a></li>
         <li><a href="#chat">الدردشة</a></li>
+        <li><a href="#profile">الحساب</a></li>
       </ul>
     </nav>
   </header>
@@ -21,8 +27,9 @@
   <!-- قسم الألعاب -->
   <section id="games">
     <h2>الألعاب</h2>
-    <iframe src="https://examplegame.com/game1" width="500" height="400"></iframe>
-    <iframe src="https://examplegame.com/game2" width="500" height="400"></iframe>
+    <button onclick="playTicTacToeAI()">لعب XO ضد AI</button>
+    <button onclick="inviteFriend()">دعوة صديق للعب XO</button>
+    <div id="tic-tac-toe"></div>
   </section>
 
   <!-- قسم المنشورات -->
@@ -39,6 +46,14 @@
     <div id="chat-container"></div>
     <textarea id="chat-input" placeholder="اكتب رسالتك هنا..."></textarea>
     <button onclick="sendMessage()">إرسال</button>
+  </section>
+
+  <!-- قسم الحساب -->
+  <section id="profile">
+    <h2>الملف الشخصي</h2>
+    <input type="file" id="profile-pic" accept="image/*">
+    <input type="text" id="username" placeholder="أدخل اسم المستخدم @...">
+    <button onclick="saveProfile()">حفظ الملف الشخصي</button>
   </section>
 
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
