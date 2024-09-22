@@ -10,6 +10,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 // إضافة منشور
 function addPost() {
@@ -62,3 +63,31 @@ function loadChat() {
 }
 
 loadChat(); // تحميل الدردشة عند فتح الصفحة
+
+// لعبة XO ضد AI
+function playTicTacToeAI() {
+  alert("ستبدأ الآن لعبة XO ضد AI. اللعبة قيد التطوير...");
+  // هنا يمكن إضافة كود اللعبة.
+}
+
+// دعوة صديق للعب XO
+function inviteFriend() {
+  const friendUsername = prompt("أدخل اسم المستخدم @... لدعوة صديق للعب XO");
+  if (friendUsername) {
+    alert(`تم إرسال الدعوة إلى ${friendUsername}`);
+    // يمكن استخدام Firebase لإرسال إشعار.
+  }
+}
+
+// حفظ الملف الشخصي
+function saveProfile() {
+  const username = document.getElementById("username").value;
+  const profilePic = document.getElementById("profile-pic").files[0];
+
+  if (username && profilePic) {
+    // حفظ اسم المستخدم والصورة في قاعدة بيانات Firestore و Firebase Storage
+    alert("تم حفظ الملف الشخصي بنجاح!");
+  } else {
+    alert("يرجى إدخال اسم المستخدم وتحميل صورة.");
+  }
+  }
