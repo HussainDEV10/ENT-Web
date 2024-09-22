@@ -1,16 +1,17 @@
 body {
-  font-family: 'Rubik', sans-serif;
-  background-color: #f0f0f0;
+  font-family: 'Alexanderia', sans-serif;
+  background-color: #f0f4f8;
   color: #333;
   margin: 0;
   padding: 0;
 }
 
 header {
-  background-color: #333;
+  background-color: #4a90e2;
   color: #fff;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
+  border-radius: 0 0 20px 20px;
 }
 
 nav ul {
@@ -20,7 +21,7 @@ nav ul {
 
 nav ul li {
   display: inline;
-  margin: 0 15px;
+  margin: 0 20px;
 }
 
 nav ul li a {
@@ -32,28 +33,30 @@ section {
   margin: 20px;
   padding: 20px;
   background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-textarea {
+textarea, input[type="text"] {
   width: 100%;
-  height: 100px;
   padding: 10px;
   margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 button {
-  padding: 10px 15px;
-  background-color: #333;
+  padding: 10px 20px;
+  background-color: #4a90e2;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #555;
+  background-color: #357ab8;
 }
 
 #posts-container, #chat-container {
@@ -65,4 +68,10 @@ button:hover {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#profile-pic {
+  display: block;
+  margin-bottom: 10px;
 }
