@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الملف الشخصي</title>
+  <title>الملف الشخصي والمنشورات</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -35,6 +35,28 @@
       <p id="profile-friends-count">عدد الأصدقاء: 0</p>
       <p id="profile-posts-count">عدد المنشورات: 0</p>
       <button class="friend-request-btn" onclick="sendFriendRequest()">إرسال طلب صداقة</button>
+    </div>
+  </div>
+
+  <!-- نموذج تسجيل الدخول -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <h3>تسجيل الدخول</h3>
+      <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+      <input type="password" id="login-password" placeholder="كلمة المرور">
+      <button onclick="login()">تسجيل الدخول</button>
+      <button onclick="showSignUp()">إنشاء حساب جديد</button>
+    </div>
+  </div>
+
+  <!-- نموذج التسجيل -->
+  <div id="signup-modal" class="modal">
+    <div class="modal-content">
+      <h3>إنشاء حساب</h3>
+      <input type="text" id="signup-username" placeholder="اسم المستخدم">
+      <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
+      <input type="password" id="signup-password" placeholder="كلمة المرور">
+      <button onclick="signUp()">إنشاء حساب</button>
     </div>
   </div>
 
