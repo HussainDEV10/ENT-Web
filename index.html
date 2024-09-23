@@ -3,62 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقع ترفيهي</title>
-  
-  <!-- تضمين خط Alexanderia -->
-  <link href="https://fonts.googleapis.com/css2?family=Alexanderia&display=swap" rel="stylesheet">
-  
-  <!-- ربط ملف CSS -->
+  <title>الملف الشخصي</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- الصورة الشخصية في أعلى الصفحة -->
   <header>
-    <h1>مرحباً بك في موقع الترفيه!</h1>
-    <nav>
-      <ul>
-        <li><a href="#games">الألعاب</a></li>
-        <li><a href="#posts">المنشورات</a></li>
-        <li><a href="#chat">الدردشة</a></li>
-        <li><a href="#profile">الحساب</a></li>
-      </ul>
-    </nav>
+    <div class="profile-circle" onclick="showUserProfile()">
+      <img id="user-profile-pic" src="default-profile.png" alt="Profile Picture">
+    </div>
   </header>
 
-  <!-- قسم الألعاب -->
-  <section id="games">
-    <h2>الألعاب</h2>
-    <button onclick="playTicTacToeAI()">لعب XO ضد AI</button>
-    <button onclick="inviteFriend()">دعوة صديق للعب XO</button>
-    <div id="tic-tac-toe"></div>
-  </section>
+  <!-- نموذج عرض ملفي الشخصي -->
+  <div id="user-profile-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeUserProfile()">&times;</span>
+      <img id="modal-user-pic" src="default-profile.png" alt="Profile Picture">
+      <h3 id="modal-username">@username</h3>
+      <p id="friends-count">عدد الأصدقاء: 0</p>
+      <p id="posts-count">عدد المنشورات: 0</p>
+    </div>
+  </div>
 
-  <!-- قسم المنشورات -->
-  <section id="posts">
-    <h2>المنشورات</h2>
-    <textarea id="post-content" placeholder="اكتب منشورك هنا..."></textarea>
-    <button onclick="addPost()">نشر</button>
-    <div id="posts-container"></div>
-  </section>
+  <!-- نموذج عرض ملف المستخدم عند الضغط على المنشور -->
+  <div id="profile-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeProfile()">&times;</span>
+      <img id="modal-profile-pic" src="default-profile.png" alt="Profile Picture">
+      <h3 id="profile-username">@username</h3>
+      <p id="profile-friends-count">عدد الأصدقاء: 0</p>
+      <p id="profile-posts-count">عدد المنشورات: 0</p>
+      <button class="friend-request-btn" onclick="sendFriendRequest()">إرسال طلب صداقة</button>
+    </div>
+  </div>
 
-  <!-- قسم الدردشة -->
-  <section id="chat">
-    <h2>الدردشة</h2>
-    <div id="chat-container"></div>
-    <textarea id="chat-input" placeholder="اكتب رسالتك هنا..."></textarea>
-    <button onclick="sendMessage()">إرسال</button>
-  </section>
+  <!-- المنشورات -->
+  <main>
+    <div class="post">
+      <div class="post-content">
+        <p>هذا هو محتوى المنشور.</p>
+      </div>
+      <div class="post-user">
+        <img class="post-user-pic" src="default-profile.png" alt="Profile" onclick="viewProfile('user-id')">
+      </div>
+    </div>
 
-  <!-- قسم الحساب -->
-  <section id="profile">
-    <h2>الملف الشخصي</h2>
-    <input type="file" id="profile-pic" accept="image/*">
-    <input type="text" id="username" placeholder="أدخل اسم المستخدم @...">
-    <button onclick="saveProfile()">حفظ الملف الشخصي</button>
-  </section>
+    <div class="post">
+      <div class="post-content">
+        <p>منشور آخر يظهر في الصفحة.</p>
+      </div>
+      <div class="post-user">
+        <img class="post-user-pic" src="default-profile.png" alt="Profile" onclick="viewProfile('user-id')">
+      </div>
+    </div>
+  </main>
 
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
   <script src="app.js"></script>
+
 </body>
 </html>
