@@ -1,4 +1,4 @@
-// إعداد Firebase
+// Firebase إعداد
 const firebaseConfig = {
   apiKey: "AIzaSyBXXCR2jN8SOP_AamRaE0vkEliR_cnpLqY",
   authDomain: "backy-123.firebaseapp.com",
@@ -12,82 +12,73 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// إضافة منشور
-function addPost() {
-  const content = document.getElementById("post-content").value;
-  db.collection("posts").add({
-    content: content,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(() => {
-    document.getElementById("post-content").value = ''; // تفريغ النص
-    loadPosts(); // إعادة تحميل المنشورات
-  });
-}
-
-// عرض المنشورات
-function loadPosts() {
-  db.collection("posts").orderBy("timestamp", "desc").get().then((querySnapshot) => {
-    document.getElementById("posts-container").innerHTML = ''; // تفريغ الحاوية
-    querySnapshot.forEach((doc) => {
-      const postItem = document.createElement('div');
-      postItem.innerHTML = `<p>${doc.data().content}</p>`;
-      document.getElementById("posts-container").appendChild(postItem);
+// إظهار ملفي الشخصي
+function showUserProfile() {
+  const currentUser = auth.currentUser;
+  if (currentUser) {
+    db.collection('users').doc(currentUser.uid).get().then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+        document.getElementById('modal-user-pic').src = userData.profilePic || 'default-profile.png';
+        document.getElementById('modal-username').innerText = `@${userData.username}`;
+        document.getElementById('friends-count').innerText = `عدد الأصدقاء: ${userData.friends.length || 0}`;
+        document.getElementById('posts-count').innerText = `عدد المنشورات: ${userData.posts.length || 0}`;
+        document.getElementById('user-profile-modal').style.display = 'block';
+      }
     });
+  }
+}
+
+// إغلاق نافذة الملف الشخصي
+function closeUserProfile() {
+  document.getElementById('user-profile-modal').style.display = 'none';
+}
+
+// عرض ملف الشخص الذي نشر المنشور
+function viewProfile(userId) {
+  db.collection('users').doc(userId).get().then((doc) => {
+    if (doc.exists) {
+      const userData = doc.data();
+      document.getElementById('modal-profile-pic').src = userData.profilePic || 'default-profile.png';
+      document.getElementById('profile-username').innerText = `@${userData.username}`;
+      document.getElementById('profile-friends-count').innerText = `عدد الأصدقاء: ${userData.friends.length || 0}`;
+      document.getElementById('profile-posts-count').innerText = `عدد المنشورات: ${userData.posts.length || 0}`;
+      document.getElementById('profile-modal').style.display = 'block';
+    }
   });
 }
 
-loadPosts(); // تحميل المنشورات عند فتح الصفحة
-
-// إرسال رسالة
-function sendMessage() {
-  const message = document.getElementById("chat-input").value;
-  db.collection("chat").add({
-    message: message,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(() => {
-    document.getElementById("chat-input").value = ''; // تفريغ النص
-    loadChat(); // إعادة تحميل الدردشة
-  });
+// إغلاق نافذة عرض المستخدم
+function closeProfile() {
+  document.getElementById('profile-modal').style.display = 'none';
 }
 
-// عرض الدردشة
-function loadChat() {
-  db.collection("chat").orderBy("timestamp").onSnapshot((querySnapshot) => {
-    document.getElementById("chat-container").innerHTML = ''; // تفريغ الحاوية
-    querySnapshot.forEach((doc) => {
-      const chatItem = document.createElement('div');
-      chatItem.innerHTML = `<p>${doc.data().message}</p>`;
-      document.getElementById("chat-container").appendChild(chatItem);
+// إرسال طلب صداقة
+function sendFriendRequest() {
+  const currentUser = auth.currentUser;
+  const recipientUserId = document.getElementById('profile-username').dataset.userId;
+  
+  if (currentUser && recipientUserId) {
+    db.collection('friendRequests').add({
+      from: currentUser.uid,
+      to: recipientUserId,
+      status: 'pending',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+      document.querySelector('.friend-request-btn').innerText = 'تم الطلب';
+      alert('تم إرسال طلب الصداقة');
     });
-  });
-}
-
-loadChat(); // تحميل الدردشة عند فتح الصفحة
-
-// لعبة XO ضد AI
-function playTicTacToeAI() {
-  alert("ستبدأ الآن لعبة XO ضد AI. اللعبة قيد التطوير...");
-  // هنا يمكن إضافة كود اللعبة.
-}
-
-// دعوة صديق للعب XO
-function inviteFriend() {
-  const friendUsername = prompt("أدخل اسم المستخدم @... لدعوة صديق للعب XO");
-  if (friendUsername) {
-    alert(`تم إرسال الدعوة إلى ${friendUsername}`);
-    // يمكن استخدام Firebase لإرسال إشعار.
   }
 }
 
-// حفظ الملف الشخصي
-function saveProfile() {
-  const username = document.getElementById("username").value;
-  const profilePic = document.getElementById("profile-pic").files[0];
-
-  if (username && profilePic) {
-    // حفظ اسم المستخدم والصورة في قاعدة بيانات Firestore و Firebase Storage
-    alert("تم حفظ الملف الشخصي بنجاح!");
-  } else {
-    alert("يرجى إدخال اسم المستخدم وتحميل صورة.");
+// تسجيل المستخدم
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    // عرض صورة الملف الشخصي
+    db.collection('users').doc(user.uid).get().then((doc) => {
+      if (doc.exists) {
+        document.getElementById('user-profile-pic').src = doc.data().profilePic || 'default-profile.png';
+      }
+    });
   }
-  }
+});
