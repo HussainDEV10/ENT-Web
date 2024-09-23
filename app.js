@@ -56,29 +56,111 @@ function closeProfile() {
 // إرسال طلب صداقة
 function sendFriendRequest() {
   const currentUser = auth.currentUser;
-  const recipientUserId = document.getElementById('profile-username').dataset.userId;
-  
-  if (currentUser && recipientUserId) {
+  const recipientUsername = document.getElementById('profile-username').innerText;
+
+  if (currentUser && recipientUsername) {
     db.collection('friendRequests').add({
       from: currentUser.uid,
-      to: recipientUserId,
-      status: 'pending',
+      to: recipientUsername,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
-      document.querySelector('.friend-request-btn').innerText = 'تم الطلب';
-      alert('تم إرسال طلب الصداقة');
+      // تحديث زر طلب الصداقة
+      document.querySelector('.friend-request-btn').innerText = 'تم إرسال الطلب';
+      document.querySelector('.friend-request-btn').disabled = true;
+
+      // إرسال إشعار إلى المستخدم المستلم
+      db.collection('notifications').add({
+        userId: recipientUsername,
+        message: `تم إرسال طلب صداقة من @${currentUser.displayName}`,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }).catch((error) => {
+      console.error('Error sending friend request: ', error);
     });
   }
 }
 
-// تسجيل المستخدم
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    // عرض صورة الملف الشخصي
-    db.collection('users').doc(user.uid).get().then((doc) => {
+// تسجيل الدخول
+function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById('login-modal').style.display = 'none';
+    })
+    .catch((error) => {
+      console.error('Error logging in: ', error.message);
+    });
+}
+
+// عرض نموذج التسجيل
+function showSignUp() {
+  document.getElementById('login-modal').style.display = 'none';
+  document.getElementById('signup-modal').style.display = 'block';
+}
+
+// إنشاء حساب جديد
+function signUp() {
+  const username = document.getElementById('signup-username').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      db.collection('users').doc(user.uid).set({
+        username: username,
+        email: email,
+        profilePic: 'default-profile.png',
+        friends: [],
+        posts: []
+      }).then(() => {
+        document.getElementById('signup-modal').style.display = 'none';
+      });
+    })
+    .catch((error) => {
+      console.error('Error signing up: ', error.message);
+    });
+}
+
+// تحميل الصورة الشخصية
+function uploadProfilePicture(file) {
+  const currentUser = auth.currentUser;
+  if (currentUser && file) {
+    const storageRef = firebase.storage().ref();
+    const profilePicRef = storageRef.child(`profilePictures/${currentUser.uid}.jpg`);
+    profilePicRef.put(file).then(() => {
+      profilePicRef.getDownloadURL().then((url) => {
+        db.collection('users').doc(currentUser.uid).update({
+          profilePic: url
+        }).then(() => {
+          document.getElementById('user-profile-pic').src = url;
+        });
+      });
+    });
+  }
+}
+
+// تحميل قائمة الأصدقاء وعدد المنشورات
+function loadUserData() {
+  const currentUser = auth.currentUser;
+  if (currentUser) {
+    db.collection('users').doc(currentUser.uid).get().then((doc) => {
       if (doc.exists) {
-        document.getElementById('user-profile-pic').src = doc.data().profilePic || 'default-profile.png';
+        const userData = doc.data();
+        document.getElementById('friends-count').innerText = `عدد الأصدقاء: ${userData.friends.length || 0}`;
+        document.getElementById('posts-count').innerText = `عدد المنشورات: ${userData.posts.length || 0}`;
       }
     });
   }
-});
+}
+
+// تسجيل الخروج
+function logout() {
+  auth.signOut().then(() => {
+    console.log("تم تسجيل الخروج");
+  }).catch((error) => {
+    console.error("خطأ في تسجيل الخروج: ", error);
+  });
+}
