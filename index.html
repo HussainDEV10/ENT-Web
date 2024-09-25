@@ -1,87 +1,66 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الملف الشخصي والمنشورات</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع ترفيهي</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <div class="profile">
+            <img id="user-profile-pic" src="default-profile.png" alt="صورة الملف الشخصي" onclick="showUserProfile()">
+            <span id="username-display">@username</span>
+            <button onclick="logout()">تسجيل الخروج</button>
+        </div>
+    </header>
 
-  <!-- الصورة الشخصية في أعلى الصفحة -->
-  <header>
-    <div class="profile-circle" onclick="showUserProfile()">
-      <img id="user-profile-pic" src="default-profile.png" alt="Profile Picture">
-    </div>
-  </header>
+    <main>
+        <h1>أهلا بكم في موقعنا الترفيهي</h1>
+        <button onclick="showLogin()">تسجيل الدخول</button>
+        <button onclick="showSignUp()">إنشاء حساب</button>
+        <div id="posts-container"></div>
+    </main>
 
-  <!-- نموذج عرض ملفي الشخصي -->
-  <div id="user-profile-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeUserProfile()">&times;</span>
-      <img id="modal-user-pic" src="default-profile.png" alt="Profile Picture">
-      <h3 id="modal-username">@username</h3>
-      <p id="friends-count">عدد الأصدقاء: 0</p>
-      <p id="posts-count">عدد المنشورات: 0</p>
-    </div>
-  </div>
-
-  <!-- نموذج عرض ملف المستخدم عند الضغط على المنشور -->
-  <div id="profile-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeProfile()">&times;</span>
-      <img id="modal-profile-pic" src="default-profile.png" alt="Profile Picture">
-      <h3 id="profile-username">@username</h3>
-      <p id="profile-friends-count">عدد الأصدقاء: 0</p>
-      <p id="profile-posts-count">عدد المنشورات: 0</p>
-      <button class="friend-request-btn" onclick="sendFriendRequest()">إرسال طلب صداقة</button>
-    </div>
-  </div>
-
-  <!-- نموذج تسجيل الدخول -->
-  <div id="login-modal" class="modal">
-    <div class="modal-content">
-      <h3>تسجيل الدخول</h3>
-      <input type="email" id="login-email" placeholder="البريد الإلكتروني">
-      <input type="password" id="login-password" placeholder="كلمة المرور">
-      <button onclick="login()">تسجيل الدخول</button>
-      <button onclick="showSignUp()">إنشاء حساب جديد</button>
-    </div>
-  </div>
-
-  <!-- نموذج التسجيل -->
-  <div id="signup-modal" class="modal">
-    <div class="modal-content">
-      <h3>إنشاء حساب</h3>
-      <input type="text" id="signup-username" placeholder="اسم المستخدم">
-      <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
-      <input type="password" id="signup-password" placeholder="كلمة المرور">
-      <button onclick="signUp()">إنشاء حساب</button>
-    </div>
-  </div>
-
-  <!-- المنشورات -->
-  <main>
-    <div class="post">
-      <div class="post-content">
-        <p>هذا هو محتوى المنشور.</p>
-      </div>
-      <div class="post-user">
-        <img class="post-user-pic" src="default-profile.png" alt="Profile" onclick="viewProfile('user-id')">
-      </div>
+    <!-- نموذج تسجيل الدخول -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLogin()">&times;</span>
+            <h2>تسجيل الدخول</h2>
+            <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="login-password" placeholder="كلمة المرور">
+            <button onclick="login()">تسجيل الدخول</button>
+        </div>
     </div>
 
-    <div class="post">
-      <div class="post-content">
-        <p>منشور آخر يظهر في الصفحة.</p>
-      </div>
-      <div class="post-user">
-        <img class="post-user-pic" src="default-profile.png" alt="Profile" onclick="viewProfile('user-id')">
-      </div>
+    <!-- نموذج التسجيل -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSignUp()">&times;</span>
+            <h2>إنشاء حساب جديد</h2>
+            <input type="text" id="signup-username" placeholder="اسم المستخدم">
+            <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="signup-password" placeholder="كلمة المرور">
+            <button onclick="signUp()">إنشاء حساب</button>
+        </div>
     </div>
-  </main>
 
-  <script src="app.js"></script>
+    <!-- نموذج الملف الشخصي -->
+    <div id="user-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUserProfile()">&times;</span>
+            <h2>ملفك الشخصي</h2>
+            <img id="modal-user-pic" src="default-profile.png" alt="صورة الملف الشخصي">
+            <p id="modal-username"></p>
+            <p id="friends-count"></p>
+            <p id="posts-count"></p>
+        </div>
+    </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage.js"></script>
+    <script src="app.js"></script>
 </body>
-</html>
+  </html>
